@@ -29,21 +29,33 @@ while True:
         MB_DATA_OLD = server.data_bank.get_holding_registers(0, data_size)
         MB_COMPLEAT = True
 
-
-
     if MB_COMPLEAT:
         MB_DATA = server.data_bank.get_holding_registers(0, data_size)
         MB_COMPLEAT = False
 
-    print(id(MB_DATA), id(MB_DATA_OLD), id(server.data_bank.get_holding_registers(0, data_size)))
+    if MB_DATA[0] == 1:
+        qw = 0
+        for q in MB_DATA:
+            if qw != 0:
+                MB_DATA[qw] +=1
+            qw += 1
+        # MB_DATA[2] += 1
 
     # t2 = time.time()
     # print(t2-t1, r1)
     # MB_DATA[2] += 1
     # print(MB_DATA)
-
+    # MB_DATA[2] = 1
     if MB_DATA != MB_DATA_OLD:
-        server.data_bank.set_holding_registers(0, MB_DATA)
+        counter = 0
+        for data_to_send in MB_DATA:
+            if data_to_send != MB_DATA_OLD[counter]:
+                server.data_bank.set_holding_registers(counter, [data_to_send])
+            counter += 1
+        # print(MB_DATA, MB_DATA_OLD)
+        # MB_DATA_OLD = MB_DATA
+        # mbw.data = MB_DATA
+        # server.data_bank.set_holding_registers(0, MB_DATA)
 
 
 

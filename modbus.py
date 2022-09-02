@@ -11,7 +11,7 @@ server = ModbusServer(ip, 502, no_block=True)
 MB_DATA = []
 MB_DATA_OLD = 0
 MB_COMPLEAT = False
-data_size = 32#000
+data_size = 32000
 while len(MB_DATA) < data_size:
     MB_DATA.append(0)
 
