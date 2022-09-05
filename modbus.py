@@ -1,6 +1,6 @@
 from pyModbusTCP.server import ModbusServer
 from threading import Thread
-# import time
+import time
 import socket
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -22,9 +22,8 @@ if server.is_run:
 
 
 class Read(Thread):
-    def __init__(self, period=0.1):
+    def __init__(self):
         super(Read, self).__init__()
-        self.period = period
         self.read_complit = False
         self.data_old = 0
         self.data = 0
@@ -38,14 +37,12 @@ class Read(Thread):
                 if self.read_complit:
                     self.data = server.data_bank.get_holding_registers(0, DATA_SIZE)
                     self.read_complit = False
-
-            # time.sleep(self.period)
+            time.sleep(0.1)
 
 
 class Write(Thread):
     def __init__(self, data_old, data):
         super(Write, self).__init__()
-        # self.period = address
         self.data_old = data_old
         self.data = data
 
@@ -56,10 +53,5 @@ class Write(Thread):
                     counter = 0
                     for data_to_send in self.data:
                         if data_to_send != self.data_old[counter]:
-                            # print(data_to_send, self.data_old[counter])
                             server.data_bank.set_holding_registers(counter, [data_to_send])
                         counter += 1
-                # if self.data != self.data_old:
-                # server.data_bank.set_holding_registers(0, self.data)
-                # self.data_old = self.data
-            # time.sleep(self.period)
